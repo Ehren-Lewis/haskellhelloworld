@@ -6,6 +6,11 @@ data MyType a
 -- data BoolTest 
     -- = 
 
+data Peson =
+    Student String Int Int | Teacher String Int 
+
+freddy :: Person
+
 var1 :: MyType Int -> String
 -- var1 :: MyType -> BoolTest -> String
 var1 (MyBool a) = show a 
