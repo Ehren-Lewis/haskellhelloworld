@@ -3,12 +3,16 @@ data MyType a
     = MyBool Bool | MyAnything a
     | MyString String
 
+data Authors = Names [String]
+data Title = Name String
 
+
+data BookInfo = Book Int String [String]
+                deriving (Show)
 
 
 -- var1 :: MyType Int -> String
 -- -- var1 :: MyType -> BoolTest -> String
--- var1 (MyBool a) = show a 
 -- var1 (MyString a)  = show a
 -- var1 ( MyAnything a) = show a
 
@@ -19,13 +23,13 @@ data MyType a
 -- myswap (MyTuple a b) = MyTuple b a
 
 lastButOne :: [a] -> [a] 
-lastButOne list  = if length list == 2
+lastButOne list  = if length list <= 2
                     then take 1 list
                     else lastButOne (tail list)
 
 
 
 main :: IO ()
-main = print ( lastButOne [1, 2, 3, 4, 5])
+main = print ( lastButOne [])
 
 
