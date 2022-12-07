@@ -1,14 +1,33 @@
 module Main where
-data MyType a
-    = MyBool Bool | MyAnything a
-    | MyString String
+-- data MyType a
+--     = MyBool Bool | MyAnything a
+--     | MyString String
 
-data Authors = Names [String]
-data Title = Name String
+-- data Authors = Names [String]
+-- data Title = Name String
 
 
-data BookInfo = Book Int String [String]
-                deriving (Show)
+-- creating your own type
+-- data BookInfo = Book Int String [String]
+--                 deriving (Show)
+
+-- creating a new value of type BookInfo
+-- myBook = Book 9220 "The Lord of The Fallen" ["Fred Olsenberg", "Sirus Restwood"]
+
+
+-- type synonym
+-- used to make code more readable
+type Age = Int
+type Title = String
+
+data Person = Person Int String deriving (Show)
+
+-- fred = Person 21 "freddy"
+
+-- personName ( Person age name) = name
+personAge :: Perso -> String
+personAge  (Person age title ) = age
+personName  (Person age title ) = title
 
 
 -- var1 :: MyType Int -> String
@@ -30,6 +49,6 @@ lastButOne list  = if length list <= 2
 
 
 main :: IO ()
-main = print ( lastButOne [])
+main = print ( lastButOne [1, 2])
 
 
