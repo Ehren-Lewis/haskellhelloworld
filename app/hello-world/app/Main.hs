@@ -90,7 +90,38 @@ parse str =
 --             ( _, None) -> ( str'', None)
 --             ( str''', Some c3) -> ( str''', Some [c1,c2, c3 ])
 
-  
+
+class Put a where
+  put :: a -> String
+
+instance Put () where
+  put () = "()"
+
+instance Put Char where
+  put x = [x]
+
+
+
+instance (Put a, Put b) => Put (a, b) where
+  put (x, y) = "(" ++ put x ++ "," ++ put y ++ ")"
+
+data Tree a 
+  = Tip
+  | Bin a (Tree a) (Tree a)
+
+instance Put Bool where
+  put True = "True"
+  put False = "False" 
+
+instance Put a => Put (Tree a) where 
+  put Tip = "Tip"
+  put (Bin x xs ys) = "(Bin " ++ put x ++ " " ++ put xs ++ " " ++ put ys ++ ")"
+
+-- put (Bin 'a' (Bin 'z' Tip Tip) Tip) 
+
+instance (Put a, Put b, Put c) => Put (a, b, c) where
+  put (x, y, z) = "(" ++ put x ++ "," ++ put y ++ "," ++ put z ++ ")"
+
 
 -- var1 :: MyType Int -> String
 -- -- var1 :: MyType -> BoolTest -> String
