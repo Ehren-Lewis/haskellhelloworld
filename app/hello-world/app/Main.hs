@@ -55,6 +55,9 @@ parseCloseParen (c : cs) =
     else (c : cs, None)
 
 
+data Final a = Full a deriving Show
+
+
 parseAlpha :: String -> ([Char], Optional Char)
 parseAlpha "" = ("", None)
 parseAlpha (c: cs) =
@@ -62,21 +65,43 @@ parseAlpha (c: cs) =
     then (cs, Some c)
     else (c: cs, None)
 
+-- parseMultiAlpha :: String -> Final String
+-- parseMultiAlpha "" str = ""
+-- parseMultiAlpha (c: cs) str =
+--   if isAlpha c
+--     then parseMultiAlpha cs c
+--     else Full str
+
+data MyShow a
+  = ToShow a deriving Show
+
+append :: [Char] -> String -> MyShow [Char] 
+append a xs = MyShow (xs ++ a )
+
+-- parseMulti :: String -> [Char] -> MyShow [Char]
+-- parseMulti "" str = ToShow ""
+-- parseMulti (c:cs) str = 
+--   if isAlpha c  
+--     then do
+--       append c str
+--       parseMulti cs str
+--     else ToShow str
+  
 
 -- newParseAlpha :: String -> ( String, Optional Char)
 
 
-parse :: String -> (String, Optional String)
-parse str =
-  case parseOpenParen str of 
-    ( _, None) -> ( str, None)
-    ( str', Some c1) -> 
-      case parseAlpha str' of 
-        ( _, None) -> ( str', None)
-        ( str'', Some c2) -> 
-          case parseCloseParen str'' of 
-            ( _, None) -> ( str'', None)
-            ( str''', Some c3) -> ( str''', Some [c1,c2, c3 ])
+-- parse :: String -> (String, Optional String)
+-- parse str =
+--   case parseOpenParen str of 
+--     ( _, None) -> ( str, None)
+--     ( str', Some c1) -> 
+--       case parseAlpha str' of 
+--         ( _, None) -> ( str', None)
+--         ( str'', Some c2) -> 
+--           case parseCloseParen str'' of 
+--             ( _, None) -> ( str'', None)
+--             ( str''', Some c3) -> ( str''', Some [c1,c2, c3 ])
 
 -- parse2 :: String -> (String, Optional String)
 -- parse2 str =
@@ -93,6 +118,14 @@ parse str =
 
 class Put a where
   put :: a -> String
+
+
+-- class Functor f where
+--   fmap :: (a -> b) -> f a -> f b
+
+-- data myFunctor f
+--   = 
+--     deriving Functor
 
 instance Put () where
   put () = "()"
@@ -122,24 +155,32 @@ instance Put a => Put (Tree a) where
 instance (Put a, Put b, Put c) => Put (a, b, c) where
   put (x, y, z) = "(" ++ put x ++ "," ++ put y ++ "," ++ put z ++ ")"
 
+-- look up these with hoogle
+-- class Functor
+-- class Applicative
+-- class Monad
 
--- var1 :: MyType Int -> String
--- -- var1 :: MyType -> BoolTest -> String
--- var1 (MyString a)  = show a
--- var1 ( MyAnything a) = show a
-
--- data MyTuple a b = MyTuple a b deriving Show 
+-- Something :: Functor -> Applicative -> Monad
 
 
--- myswap :: MyTuple a b -> MyTuple b a 
--- myswap (MyTuple a b) = MyTuple b a
+
+
+
+
+
+
 
 lastButOne :: [a] -> [a] 
 lastButOne list  = if length list <= 2
                     then take 1 list
                     else lastButOne (tail list)
 
+-- bmap :: ( a-> b) -> First a -> First b
+-- bmap = fmap
 
+
+(+3) :: Int -> Int
+(+3) x = x + 3
 
 main :: IO ()
 main = print ( lastButOne [1, 2])
