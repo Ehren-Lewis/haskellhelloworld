@@ -72,11 +72,11 @@ parseAlpha (c: cs) =
 --     then parseMultiAlpha cs c
 --     else Full str
 
-data MyShow a
-  = ToShow a deriving Show
+-- data MyShow a
+--   = ToShow a deriving Show
 
-append :: [Char] -> String -> MyShow [Char] 
-append a xs = MyShow (xs ++ a )
+-- append :: [Char] -> String -> MyShow [Char] 
+-- append a xs = MyShow (xs ++ a )
 
 -- parseMulti :: String -> [Char] -> MyShow [Char]
 -- parseMulti "" str = ToShow ""
@@ -122,10 +122,8 @@ class Put a where
 
 -- class Functor f where
 --   fmap :: (a -> b) -> f a -> f b
+    --  ($) :: (a -> b) -> f a -> f b 
 
--- data myFunctor f
---   = 
---     deriving Functor
 
 instance Put () where
   put () = "()"
@@ -138,17 +136,17 @@ instance Put Char where
 instance (Put a, Put b) => Put (a, b) where
   put (x, y) = "(" ++ put x ++ "," ++ put y ++ ")"
 
-data Tree a 
-  = Tip
-  | Bin a (Tree a) (Tree a)
+-- data Tree a 
+--   = Tip
+--   | Bin a (Tree a) (Tree a)
 
 instance Put Bool where
   put True = "True"
   put False = "False" 
 
-instance Put a => Put (Tree a) where 
-  put Tip = "Tip"
-  put (Bin x xs ys) = "(Bin " ++ put x ++ " " ++ put xs ++ " " ++ put ys ++ ")"
+-- instance Put a => Put (Tree a) where 
+--   put Tip = "Tip"
+--   put (Bin x xs ys) = "(Bin " ++ put x ++ " " ++ put xs ++ " " ++ put ys ++ ")"
 
 -- put (Bin 'a' (Bin 'z' Tip Tip) Tip) 
 
@@ -164,7 +162,12 @@ instance (Put a, Put b, Put c) => Put (a, b, c) where
 
 
 
-
+parseOnlyAlpha :: String -> [Char]
+parseOnlyAlpha "" = ""
+parseOnlyAlpha (c:cs) = if 
+  isAlpha c 
+  then parseOnlyAlpha cs
+  else [c]
 
 
 
@@ -178,9 +181,38 @@ lastButOne list  = if length list <= 2
 -- bmap :: ( a-> b) -> First a -> First b
 -- bmap = fmap
 
+-- class Functor f where
+--   fmap :: ( a->b ) -> f a -> f b
 
-(+3) :: Int -> Int
-(+3) x = x + 3
+
+data Maybe2 a 
+  = Just2 a
+  | Nothing2 deriving Show
+
+instance Functor Maybe2 where
+  fmap f (Just2 a ) = Just2 (f a)
+  fmap f Nothing2 = Nothing2
+
+
+data Tree a 
+  = Tip a
+  | Branch (Tree a) (Tree a) deriving Show
+
+instance Functor Tree where 
+  fmap f ( Tip a ) = Tip ( f a)
+  fmap f  ( Branch left right) = Branch (fmap f left) ( fmap  f right)
+
+
+
+
+instance Applicative Maybe2 where
+  pure a = Just2 a
+  Just2 f <*> j = fmap f j 
+  Nothing2 <*> _ = Nothing2
+  
+
+-- instance Applicative Tree where
+--   pure = Tree
 
 main :: IO ()
 main = print ( lastButOne [1, 2])
